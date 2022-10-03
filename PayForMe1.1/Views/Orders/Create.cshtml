@@ -1,0 +1,194 @@
+﻿@model PayForMe1._1.Models.Order
+
+@{
+    ViewData["Title"] = "Create Order";
+}
+<br />
+<form asp-action="Create" class="row g-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-12">
+        <h3 class="text-center"> User Name </h3>
+    </div>
+    <div class="col-md-1">
+        @*space*@
+    </div>
+    <div class="col-md-9">
+        <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+    </div>
+    <div class="col-md-2">
+        @*space*@
+    </div>
+    <div class="col-md-12">
+        @*new line*@
+    </div>
+    <div class="col-md-12">
+        <h3 class="text-center"> Service </h3>
+    </div>
+    <div class="col-md-1">
+        @*space*@
+    </div>
+    <div class="col-md-3 MainService">
+        <select asp-for="MainServiceId" class="form-control" asp-items="ViewBag.MainServiceId">
+            <option selected>select SP ...</option>
+        </select>
+    </div>
+    @*asp-items="ViewBag.MiddleServiceId"*@
+    <div class="col-md-3 MiddleService">
+        <select asp-for="MiddleServiceId" class ="form-control">
+            <option selected> Nothing to select ...</option>
+        </select>
+    </div>
+    @*asp-items="ViewBag.LastServiceId"*@
+    <div class="col-md-3 LastService">
+        <select asp-for="LastServiceId" class="form-control">
+            <option selected> Nothing to select ...</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        @*space*@
+    </div>
+    <div class="col-md-1">
+        @*space*@
+    </div>
+    <div class="col-md-3">
+        <input asp-for="Cost" class="form-control" placeholder="Cost" value="" />
+        <span asp-validation-for="Cost" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <input asp-for="Tax" class="form-control" placeholder="Tax" />
+        <span asp-validation-for="Tax" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <input asp-for="Total" class="form-control" placeholder="Total" />
+        <span asp-validation-for="Total" class="text-danger"></span>
+    </div>
+    <div class="col-md-12">
+        @*new line*@
+    </div>
+    <div class="col-md-12">
+        <h3 class="text-center"> User Service Number </h3>
+    </div>
+    <div class="col-md-1">
+        @*space*@
+    </div>
+    <div class="col-md-3">
+        <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <input asp-for="LandLineNumber" class="form-control" placeholder="Land Line Number" />
+        <span asp-validation-for="LandLineNumber" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" asp-for="IsDebt" /> @Html.DisplayNameFor(model => model.IsDebt)
+        </label>
+    </div>
+    <div class="col-md-2">
+        @*space*@
+    </div>
+    <div class="col-md-1">
+        @*space*@
+    </div>
+    <div class="col-md-9">
+        <input asp-for="OrderDate" class="form-control" />
+        <span asp-validation-for="OrderDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        @*space*@
+    </div>
+    <div class="col-md-1">
+        @*space*@
+    </div>
+    <div class="form-group col-md-9">
+        <input type="submit" value="Create" class="btn btn-primary col-md-12" />
+    </div>
+    <div class="col-md-2">
+        @*space*@
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $('#MainServiceId').on('change',function(){
+                var mainserviceid = $(this).val();
+                var middleserviceid = $('#MiddleServiceId');
+                middleserviceid.empty();
+                middleserviceid.append('<option></option>');
+                if(mainserviceid !== ''){
+                    $.ajax({
+                        url: '/Orders/GetMiddleServices?MainServiceId=' + mainserviceid,
+                        success: function (MiddleServices) {
+                            $.each(MiddleServices, function (i, middleservice) {
+                                middleserviceid.append($('<option></option>').attr('value', middleservice.middleServiceId).text(middleservice.middleServiceName));
+                                
+                            });
+                        },
+                        error: function () {
+                            alert('somthing went wrong');
+                        }
+                    });
+                }
+                if (mainserviceid !== '') {
+                    $.ajax({
+                        url: '/Orders/GetMainServiceCost?ServiceId=' + mainserviceid,
+                        success: function (cost) {
+                            $('input.Cost').val(cost);
+                        },
+                        error: function () {
+                            alert('somthing went wrong');
+                        }
+                    });
+                }
+            });
+            $('#MiddleServiceId').on('change', function(){
+                var middleserviceid = $('#MiddleServiceId').val();
+                var lastserviceid = $('#LastServiceId');
+                lastserviceid.empty();
+                lastserviceid.append('<option></option>');
+                if (middleserviceid !== '') {
+                    $.ajax({
+                        url: '/Orders/GetLastServices?MiddleServiceId=' + middleserviceid,
+                        success: function (LastServices) {
+                            $.each(LastServices, function (i, lastservice) {
+                                lastserviceid.append($('<option></option>').attr('value', lastservice.lastServiceId).text(lastservice.lastServiceName));
+                            });
+                        },
+                        error: function () {
+                            alert('somthing went wrong');
+                        }
+                    });
+                }
+                if (middleserviceid !== '') {
+                    $.ajax({
+                        url: '/Orders/GetMiddleServiceCost?ServiceId=' + middleserviceid,
+                        success: function (cost) {
+                            $('input.Cost').val(cost);
+                        },
+                        error: function () {
+                            alert('somthing went wrong');
+                        }
+                    });
+                }
+            });
+            $('#LastServiceId').on('change', function () {
+                var middleserviceid = $('#MiddleServiceId').val();
+                var lastserviceid = $('#LastServiceId').val();
+                if (middleserviceid !== '') {
+                    $.ajax({
+                        url: '/Orders/GetLastServiceCost?ServiceId=' + lastserviceid,
+                        success: function (cost) {
+                            $('input.Cost').val(cost);
+                        },
+                        error: function () {
+                            alert('somthing went wrong');
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

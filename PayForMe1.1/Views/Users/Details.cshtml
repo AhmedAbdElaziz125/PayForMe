@@ -1,0 +1,197 @@
+﻿@model PayForMe1._1.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+}
+@{
+            var debts = 0;
+            var orders = 0;
+            decimal cost = 0;
+            decimal tax = 0;
+            decimal total = 0;
+            decimal debt = 0;
+            foreach (var item in Model.Orders)
+            {
+                orders += 1;
+                cost += item.Cost;
+                tax += item.Tax;
+                total += item.Total;
+
+                if (item.IsDebt == true)
+                {
+                    debts += 1;
+                    debt += item.Total;
+                }
+                    
+            }
+        }
+<style>
+    body{
+    background-color: #e2e8f0;    
+}
+</style>
+<div class="row">
+    <div class="col-sm-4 text-center">
+        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="@Model.UserName" class="" width="250">
+        <p class="text-secondary mb-1"> User id : @Model.UserId</p>
+        <p class="text-secondary mb-1">@Model.DateOfBirth</p>
+        <p class="text-secondary mb-1">@Model.PhoneNumber1</p>
+        <p class="text-secondary mb-1">@Model.PhoneNumber2</p>
+        <p class="text-secondary mb-1">@Model.LandLine</p>
+    </div>
+    <div class="col-sm-8 text-center">
+        <h1>@Model.UserName</h1>
+        <hr />
+        <h6>@Model.Address</h6>
+        <h5>@Model.NationalId</h5>
+        <div class="row text-end">
+            <div class="col-sm-3">@Model.Gender</div>
+            <div class="col-sm-3">@Model.Religion</div>
+            <div class="col-sm-3">@Model.MaritalStatus</div>
+            <div class="col-sm-3"></div>
+        </div>
+        <br />
+        <div class="row">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>النقاط</th>
+                        <th>دين</th>
+                        <th>غير مدفوع</th>
+                        <th>مدفوع</th>
+                        <th>الاوردارات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int paidorders = 0;
+                        int unpaidorders = 0;
+                        foreach (var order in Model.Orders)
+                        {
+                            if (order.IsDebt == true)
+                                unpaidorders++;
+                            else
+                                paidorders++;
+                        }
+                    }
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>@Model.Points</td>
+                        <td><a class="btn-outline-danger" asp-action="UserDebits" asp-route-id="@Model.UserId"> @Model.Debits</a></td>
+                        <td><a class="btn-outline-danger" asp-action="UserDebits" asp-route-id="@Model.UserId">@unpaidorders</a></td>
+                        <td>@paidorders</td>
+                        <td>@Model.OrdersCount</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <table class="table table-dark ">
+              <thead>
+                <tr>
+                    <th scope="col">التكلفة</th>
+                    <th scope="col"></th>
+                    <th scope="col">الاجمالي</th>
+                    <th scope="col">الرصيد</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                    <th scope="col">@cost</th>
+                    <th scope="col" class="btn-outline-success">@tax</th>
+                    <th scope="col">@total</th>
+                    <th scope="col" class="btn-outline-primary">+@Model.Balance↑</th>
+                  </tr>
+              </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <table class="table align-middle table-hover table-dark ">
+          <thead>
+            <tr>
+              <th scope="col">Order Id</th>
+              <th scope="col">Service Number</th>
+              <th scope="col">Service Name</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Tax</th>
+              <th scope="col">Total</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">...</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var item in Model.Orders)
+            {
+                var status = "primary";
+                var ServiceNumber = item.PhoneNumber;
+                var service = "";
+                if (item.LastService != null)
+                {
+                    service = item.LastService.LastServiceName;
+                }
+                else
+                {
+                    if (item.MiddleService != null)
+                    {
+                        service = item.MiddleService.MiddleServiceName;
+                    }
+                    else
+                    {
+                        if (item.MainService != null)
+                        {
+                            service = item.MainService.MainServiceName;
+                        }
+                        else
+                        {
+                            service = "غير موجود";
+                        }
+                    }
+                }
+                if(item.PhoneNumber == null)
+                    ServiceNumber = item.LandLineNumber;
+                if(item.IsDebt==true)
+                {
+                        status = "danger";
+                }
+                <tr class="table-@status">
+                    <th scope="row">@Html.DisplayFor(modelItem => item.OrderId)</th>
+                    <td>@ServiceNumber</td>
+                    <td>@service</td>
+                    <td>@Html.DisplayFor(modelItem => item.Cost)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Tax)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Total)</td>
+                    <td>@Html.DisplayFor(modelItem => item.OrderDate)</td>
+                    <td>
+                        <a asp-controller="Orders" asp-action="Edit" asp-route-id="@item.OrderId">Edit</a> |
+                        <a asp-controller="Orders" asp-action="Details" asp-route-id="@item.OrderId">Details</a> |
+                        <a asp-controller="Orders" asp-action="Delete" asp-route-id="@item.OrderId">Delete</a>
+                    </td>
+                </tr>     
+            }
+            </tbody>
+            <tfoot>
+                <tr>
+                  <th scope="col">@Model.OrdersCount</th>
+                  <th scope="col">Service Number</th>
+                  <th scope="col">Service Name</th>
+                  <th scope="col">@cost</th>
+                  <th scope="col">@tax</th>
+                  <th scope="col">@total</th>
+                  <th scope="col"></th>
+                  <th scope="col">@debt</th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div>
+    <a class="btn-outline-success" asp-action="Edit" asp-route-id="@Model?.UserId">Edit</a>
+    <a class="btn-outline-danger" asp-action="Index">Back to List</a>
+</div>
+

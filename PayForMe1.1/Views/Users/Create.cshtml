@@ -1,0 +1,120 @@
+﻿@model PayForMe1._1.Models.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<br />
+<form asp-action="Create" class="row g-3">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-5">
+        <input asp-for="UserName" type="text" class="form-control" placeholder="User name" aria-label="First name" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="col-md-5">
+        <input asp-for="NationalId" type="text" class="form-control" placeholder="National id" aria-label="National id" />
+        <span asp-validation-for="NationalId" class="text-danger"></span>
+    </div>
+    <div class="col-md-5">
+        <input asp-for="Address" type="text" class="form-control" placeholder="User address" aria-label="Address" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="col-md-5">
+        <input asp-for="DateOfBirth" type="datetime" class="form-control" placeholder="User date of birth" aria-label="date of birth" />
+        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="col-md-5">
+        <input asp-for="Age" type="number" class="form-control" placeholder="User age" aria-label="User age" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <select asp-for="Gender" class="form-select" aria-label="Default select example">
+            <option selected value="ذكر">ذكر</option>
+            <option value="أنثي">أنثي</option>
+        </select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <select asp-for="Religion" class="form-select" aria-label="Default select example">
+            <option selected value="مسلم">مسلم</option>
+            <option value="مسلمة">مسلمة</option>
+        </select>
+        <span asp-validation-for="Religion" class="text-danger"></span>
+    </div>
+    <div class="col-md-5">
+        <input asp-for="PhoneNumber1" type="number" class="form-control" placeholder="User phone number 1" aria-label="User phone number 1" />
+        <span asp-validation-for="PhoneNumber1" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <select asp-for="MaritalStatus" class="form-select" aria-label="Default select example">
+            <option selected value="اعزب">اعزب   </option>
+            <option value="متزوج">متزوج  </option>
+            <option value="متزوجة">متزوجة </option>
+            <option value="أرمل">أرمل   </option>
+            <option value="أرملة">أرملة  </option>
+            <option value="مطلقة">مطلقة  </option>
+        </select>
+        <span asp-validation-for="MaritalStatus" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <input asp-for="CreationDate" class="form-control" />
+        <span asp-validation-for="CreationDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-12">
+    </div>
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-8">
+        <h3>
+            Additional Information
+        </h3>
+    </div>
+    <div class="col-md-12">
+    </div>
+    <div class="col-md-5">
+        <input asp-for="PhoneNumber2" type="number" class="form-control" placeholder="User phone number 2" aria-label="User phone number 2" />
+        <span asp-validation-for="PhoneNumber2" class="text-danger"></span>
+    </div>
+    <div class="col-md-7">
+    </div>
+    <div class="col-md-5">
+        <input asp-for="LandLine" type="number" class="form-control" placeholder="User Land Line number" aria-label="User Land Line number" />
+        <span asp-validation-for="LandLine" class="text-danger"></span>
+    </div>
+    <div class="col-md-7">
+    </div>
+    <div class="col-md-1">
+        <input asp-for="Points" type="number" class="form-control" placeholder="Points" aria-label="User orders points" />
+        <span asp-validation-for="Points" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <input asp-for="OrdersCount" type="number" class="form-control" placeholder="Orders count" aria-label="User orders count" />
+        <span asp-validation-for="OrdersCount" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <input asp-for="Debits" type="number" class="form-control" placeholder="Orders Debit" aria-label="User orders Debit" />
+        <span asp-validation-for="Debits" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
+        <input asp-for="Balance" type="number" class="form-control" placeholder="User Balance" aria-label="User Balance" />
+        <span asp-validation-for="Balance" class="text-danger"></span>
+    </div>
+    <div class="col-md-5">
+    </div>
+    <div class="col-md-12">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-12">
+    </div>
+    <div class="form-group col-md-12">
+        <input type="submit" value="Create" class="btn btn-primary col-md-12" />
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

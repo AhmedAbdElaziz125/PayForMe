@@ -1,0 +1,133 @@
+﻿@model IEnumerable<PayForMe1._1.Models.User>
+
+@{
+    ViewData["Title"] = "Users";
+}
+<br />
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        "Users" DataTable 
+    </div>
+    <div class="card-body">
+        <div class="dataTable-wrapper dataTable-loading no-footer sortable searchable fixed-columns">
+            <div class="dataTable-top">
+                <div class="dataTable-dropdown">
+                    <label>
+                        <select class="dataTable-selector">
+                            <option value="5">5</option>
+                            <option value="10" selected="">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                            <option value="25">25</option>
+                        </select>
+                        Orders per page
+                    </label>
+                </div>
+                <div class="dataTable-search">
+                    <input class="dataTable-input" placeholder="Search..." type="text">
+                </div>
+            </div>
+            <div class="dataTable-container">
+                <table id="datatablesSimple" class="dataTable-table">
+                    <thead>
+                        <tr>
+                            <th data-sortable="">
+                                <a href="#" class="dataTable-sorter"> # </a>
+                            </th>
+                            <th data-sortable="">
+                                <a href="#" class="dataTable-sorter">Name</a>
+                            </th>
+                            <th data-sortable="">
+                                <a href="#" class="dataTable-sorter">Address</a>
+                            </th>
+                            <th data-sortable="">
+                                <a href="#" class="dataTable-sorter">Balance</a>
+                            </th>
+                            <th data-sortable="">
+                                <a href="#" class="dataTable-sorter">Points</a>
+                            </th>
+                            <th data-sortable="">
+                                <a href="#" class="dataTable-sorter">Orders Count</a>
+                            </th>
+                            <th data-sortable="">
+                                <a href="#" class="dataTable-sorter">Debits</a>
+                            </th>
+                            <th data-sortable="" @* style="width: 13.1206%;"*@>
+                                <a href="#" class="dataTable-sorter">...</</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int Rate = 1;
+                            foreach (var item in Model)
+                            {
+                                var status = "";
+                                var ratestatus = "";
+                                if(item.Debits > 0)
+                                {
+                                        status = "danger";
+                                }
+                                if (Rate == 1 || Rate == 2 || Rate == 3)
+                                {
+                                    ratestatus = "primary";
+                                }
+                                    <tr class="table-@status">
+                                        <th class="text-center text-@ratestatus" scope="row">@Rate</th>
+                                        <th scope="row">@Html.DisplayFor(modelItem => item.UserName)</th>
+                                        <td>@Html.DisplayFor(modelItem => item.Address)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Points)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.OrdersCount)</td>
+                                        <td>
+                                            <a asp-action="UserDebits" asp-route-id="@item.UserId">
+                                                @Html.DisplayFor(modelItem => item.Debits)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                                        </td>
+                                    </tr>
+                                Rate++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="dataTable-bottom">
+                <div class="dataTable-info">
+                    Showing 1 to 10 of 57 entries
+                </div>
+                <nav class="dataTable-pagination">
+                    <ul class="dataTable-pagination-list">
+                        <li class="active">
+                            <a href="#" data-page="1">1</a>
+                        </li>
+                        <li class="">
+                            <a href="#" data-page="2">2</a>
+                        </li>
+                        <li class="">
+                            <a href="#" data-page="3">3</a>
+                        </li>
+                        <li class="">
+                            <a href="#" data-page="4">4</a>
+                        </li>
+                        <li class="">
+                            <a href="#" data-page="5">5</a>
+                        </li>
+                        <li class="">
+                            <a href="#" data-page="6">6</a>
+                        </li>
+                        <li class="pager">
+                            <a href="#" data-page="2">›</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
